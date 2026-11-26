@@ -5,6 +5,8 @@ productos con código o a granel (por kilo), inventario con kardex, compras, cli
 
 **Tecnologías:** Java 17 · Spring Boot 3.3 · JavaFX 21 · AtlantaFX · SQLite · Maven
 
+> **¿Vas a instalarlo en Windows?** Sigue la guía paso a paso: [INSTALACION-WINDOWS.md](INSTALACION-WINDOWS.md)
+
 ## Requisitos
 
 - JDK 17 o superior (probado con Amazon Corretto 17).
