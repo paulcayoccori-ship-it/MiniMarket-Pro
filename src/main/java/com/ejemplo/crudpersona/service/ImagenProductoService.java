@@ -23,7 +23,7 @@ import java.util.Optional;
 public class ImagenProductoService {
 
     private static final int LADO_MAXIMO = 600;
-    private final Path carpeta = Paths.get("imagenes-productos").toAbsolutePath();
+    private final Path carpeta = Paths.get(System.getProperty("app.imagenes.dir", "imagenes-productos")).toAbsolutePath();
 
     /** Copia la imagen elegida (PNG, JPG, GIF o BMP) y devuelve el nombre de archivo guardado. */
     public String guardar(File origen, String codigoProducto) {

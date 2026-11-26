@@ -1,0 +1,62 @@
+name: Instalador Windows
+
+# Se ejecuta al subir una etiqueta de version (ej. v1.0.0) y publica el instalador
+# en la seccion "Releases" de GitHub. Tambien se puede lanzar a mano desde la pestana Actions.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  construir:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Instalar Inno Setup
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y --no-progress
+          }
+
+      - name: Pruebas
+        shell: pwsh
+        run: .\mvnw.cmd -B test
+
+      - name: Construir instalador
+        shell: pwsh
+        run: .\instalador\construir-instalador.ps1
+
+      - name: Guardar instalador como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: MiniMarketPro-Setup
+          path: target/instalador/MiniMarketPro-Setup-*.exe
+
+      - name: Publicar release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: MiniMarket Pro ${{ github.ref_name }}
+          files: target/instalador/MiniMarketPro-Setup-*.exe
+          body: |
+            ## Descargar e instalar
+
+            1. Descarga **MiniMarketPro-Setup-*.exe** (abajo, en *Assets*).
+            2. Ábrelo. Si Windows muestra "Windows protegió su PC", haz clic en **Más información → Ejecutar de todas formas**.
+            3. Sigue el asistente (Siguiente → Instalar). No necesitas instalar Java: ya viene incluido.
+            4. Abre **MiniMarket Pro** desde el escritorio o el menú Inicio.
+
+            Los datos se guardan en `%LOCALAPPDATA%\MiniMarket Pro` y se conservan al actualizar o desinstalar.

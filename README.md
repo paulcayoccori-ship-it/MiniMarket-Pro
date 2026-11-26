@@ -5,7 +5,28 @@ productos con código o a granel (por kilo), inventario con kardex, compras, cli
 
 **Tecnologías:** Java 17 · Spring Boot 3.3 · JavaFX 21 · AtlantaFX · SQLite · Maven
 
-> **¿Vas a instalarlo en Windows?** Sigue la guía paso a paso: [INSTALACION-WINDOWS.md](INSTALACION-WINDOWS.md)
+## Descargar para Windows (recomendado)
+
+1. Entra a **[Releases](https://github.com/paulcayoccori-ship-it/MiniMarket-Pro/releases/latest)** y descarga `MiniMarketPro-Setup-x.y.z.exe`.
+2. Ábrelo y sigue el asistente. **No necesitas instalar Java**: el instalador ya lo incluye.
+3. Si Windows muestra *"Windows protegió su PC"*, haz clic en **Más información → Ejecutar de todas formas**.
+4. Abre **MiniMarket Pro** desde el escritorio o el menú Inicio.
+
+Los datos (base de datos y fotos) se guardan en `%LOCALAPPDATA%\MiniMarket Pro` y se conservan al actualizar o desinstalar.
+
+> ¿Prefieres ejecutarlo desde el código fuente? Sigue la guía: [INSTALACION-WINDOWS.md](INSTALACION-WINDOWS.md)
+
+### Generar el instalador (desarrolladores)
+
+- **Automático:** al subir una etiqueta de versión (`git tag v1.0.1` y `git push origin v1.0.1`), GitHub Actions
+  compila el instalador y lo publica en Releases. Recuerda actualizar `<version>` en `pom.xml` antes.
+- **En tu PC:** con JDK 17+ e [Inno Setup 6](https://jrsoftware.org/isdl.php) instalados:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File instalador\construir-instalador.ps1
+```
+
+El instalador queda en `target\instalador\`.
 
 ## Requisitos
 
