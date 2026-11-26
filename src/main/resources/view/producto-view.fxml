@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.CustomTextField?>
+<?import com.ejemplo.crudpersona.ui.Paginador?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.ejemplo.crudpersona.controller.ProductoController"
+      styleClass="pagina">
+
+    <!-- ============ Cabecera ============ -->
+    <HBox styleClass="pagina-cabecera">
+        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+            <Label text="Productos" styleClass="pagina-titulo"/>
+            <Label text="Gestiona el catalogo, precios y categorias de tus productos"
+                   styleClass="pagina-subtitulo"/>
+        </VBox>
+        <Button text="Nuevo producto" onAction="#onNuevo" styleClass="accent,boton-principal">
+            <graphic><FontIcon iconLiteral="fth-plus"/></graphic>
+        </Button>
+    </HBox>
+
+    <!-- ============ Tabla ============ -->
+    <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
+        <HBox styleClass="barra-herramientas">
+            <CustomTextField fx:id="txtBuscar" promptText="Buscar por nombre, codigo o descripcion"
+                             styleClass="buscador" prefWidth="340.0">
+                <left><FontIcon iconLiteral="fth-search"/></left>
+            </CustomTextField>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnEditar" text="Editar" onAction="#onEditar" styleClass="button-outlined">
+                <graphic><FontIcon iconLiteral="fth-edit-2"/></graphic>
+            </Button>
+            <Button fx:id="btnEliminar" text="Eliminar" onAction="#onEliminar"
+                    styleClass="button-outlined,danger">
+                <graphic><FontIcon iconLiteral="fth-trash-2"/></graphic>
+            </Button>
+        </HBox>
+
+        <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId"        text="ID"        prefWidth="70.0" maxWidth="90.0"/>
+                <TableColumn fx:id="colCodigo"    text="CODIGO"    prefWidth="140.0"/>
+                <TableColumn fx:id="colNombre"    text="NOMBRE"    prefWidth="280.0"/>
+                <TableColumn fx:id="colCategoria" text="CATEGORIA" prefWidth="180.0"/>
+                <TableColumn fx:id="colTipo"      text="TIPO"      prefWidth="120.0"/>
+                <TableColumn fx:id="colPrecioCompra" text="P. COMPRA" prefWidth="120.0"/>
+                <TableColumn fx:id="colPrecio"    text="P. VENTA"  prefWidth="120.0"/>
+                <TableColumn fx:id="colStock"     text="STOCK"     prefWidth="110.0" minWidth="100.0"/>
+            </columns>
+        </TableView>
+
+        <Paginador fx:id="paginador"/>
+    </VBox>
+</VBox>

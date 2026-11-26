@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.CustomTextField?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<!-- Formulario de producto (panel lateral). Lo usan Productos y el Punto de venta.
+     El controlador es ProductoFormController (se asigna al cargar). -->
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      styleClass="drawer"
+      prefWidth="460.0" maxWidth="460.0" maxHeight="Infinity">
+
+    <HBox styleClass="drawer-header">
+        <StackPane styleClass="drawer-icono"><FontIcon iconLiteral="fth-package"/></StackPane>
+        <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblTitulo" text="Nuevo producto" styleClass="drawer-titulo"/>
+            <Label fx:id="lblSubtitulo" text="Agrega un producto al catalogo" styleClass="drawer-subtitulo"/>
+        </VBox>
+        <Button onAction="#onCerrar" styleClass="flat,button-circle">
+            <graphic><FontIcon iconLiteral="fth-x"/></graphic>
+        </Button>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" styleClass="drawer-scroll" VBox.vgrow="ALWAYS">
+        <VBox styleClass="drawer-body">
+
+            <Label text="TIPO DE PRODUCTO" styleClass="seccion-form"/>
+            <HBox styleClass="pf-tipos">
+                <fx:define><ToggleGroup fx:id="grupoTipo"/></fx:define>
+                <ToggleButton fx:id="tglConCodigo" toggleGroup="$grupoTipo" selected="true"
+                              styleClass="pf-tipo" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <graphic>
+                        <VBox styleClass="pf-tipo-contenido">
+                            <FontIcon iconLiteral="fth-maximize"/>
+                            <Label text="Con codigo de barras" styleClass="pf-tipo-titulo"/>
+                            <Label text="Se escanea o se escribe" styleClass="pf-tipo-detalle"/>
+                        </VBox>
+                    </graphic>
+                </ToggleButton>
+                <ToggleButton fx:id="tglGranel" toggleGroup="$grupoTipo"
+                              styleClass="pf-tipo" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <graphic>
+                        <VBox styleClass="pf-tipo-contenido">
+                            <FontIcon iconLiteral="fth-shopping-bag"/>
+                            <Label text="A granel / sin codigo" styleClass="pf-tipo-titulo"/>
+                            <Label text="Codigo interno automatico" styleClass="pf-tipo-detalle"/>
+                        </VBox>
+                    </graphic>
+                </ToggleButton>
+            </HBox>
+
+            <Label text="DATOS GENERALES" styleClass="seccion-form"/>
+
+            <VBox styleClass="campo">
+                <Label fx:id="lblCodigo" text="Codigo de barras *" styleClass="campo-label"/>
+                <CustomTextField fx:id="txtCodigo" promptText="Escanea el codigo o escribelo">
+                    <left><FontIcon iconLiteral="fth-maximize"/></left>
+                </CustomTextField>
+                <Label styleClass="campo-error" visible="false" managed="false"/>
+                <Label fx:id="lblAyudaCodigo" styleClass="campo-ayuda" wrapText="true"
+                       text="Con el lector: haz clic aqui y escanea. A mano: escribe el numero y presiona Enter."/>
+            </VBox>
+
+            <VBox styleClass="campo">
+                <Label text="Nombre *" styleClass="campo-label"/>
+                <TextField fx:id="txtNombre" promptText="Ej. Gaseosa Oro 350 ml"/>
+                <Label styleClass="campo-error" visible="false" managed="false"/>
+            </VBox>
+
+            <VBox styleClass="campo">
+                <Label text="Categoria" styleClass="campo-label"/>
+                <HBox spacing="8.0">
+                    <ComboBox fx:id="cmbCategoria" promptText="Sin categoria" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnNuevaCategoria" text="Nueva" onAction="#onMostrarNuevaCategoria"
+                            styleClass="button-outlined">
+                        <graphic><FontIcon iconLiteral="fth-plus"/></graphic>
+                    </Button>
+                </HBox>
+                <HBox fx:id="panelNuevaCategoria" styleClass="pf-nueva-categoria" visible="false" managed="false">
+                    <TextField fx:id="txtNuevaCategoria" promptText="Nombre de la nueva categoria" HBox.hgrow="ALWAYS"/>
+                    <Button text="Crear" onAction="#onCrearCategoria" styleClass="accent"/>
+                    <Button onAction="#onOcultarNuevaCategoria" styleClass="flat,button-icon">
+                        <graphic><FontIcon iconLiteral="fth-x"/></graphic>
+                    </Button>
+                </HBox>
+                <Label styleClass="campo-error" visible="false" managed="false"/>
+            </VBox>
+
+            <VBox styleClass="campo">
+                <Label fx:id="lblUnidad" text="Unidad de venta" styleClass="campo-label"/>
+                <HBox spacing="8.0">
+                    <ComboBox fx:id="cmbUnidad" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnNuevaUnidad" text="Nueva" onAction="#onMostrarNuevaUnidad"
+                            styleClass="button-outlined">
+                        <graphic><FontIcon iconLiteral="fth-plus"/></graphic>
+                    </Button>
+                </HBox>
+                <VBox fx:id="panelNuevaUnidad" styleClass="pf-nueva-categoria" spacing="8.0" visible="false" managed="false">
+                    <HBox spacing="6.0">
+                        <TextField fx:id="txtNuevaUnidad" promptText="Nombre (ej. Six pack)" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="txtNuevaAbreviatura" promptText="Abrev. (six)" prefWidth="90.0"/>
+                    </HBox>
+                    <HBox spacing="6.0" alignment="CENTER_LEFT">
+                        <CheckBox fx:id="chkNuevaDecimales" text="Se vende con decimales (peso o volumen)"
+                                  HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Button text="Crear" onAction="#onCrearUnidad" styleClass="accent"/>
+                        <Button onAction="#onOcultarNuevaUnidad" styleClass="flat,button-icon">
+                            <graphic><FontIcon iconLiteral="fth-x"/></graphic>
+                        </Button>
+                    </HBox>
+                </VBox>
+                <Label styleClass="campo-error" visible="false" managed="false"/>
+                <Label fx:id="lblAyudaUnidad" styleClass="campo-ayuda" wrapText="true"/>
+            </VBox>
+
+            <Label text="PRECIOS" styleClass="seccion-form"/>
+
+            <HBox spacing="14.0">
+                <VBox styleClass="campo" HBox.hgrow="ALWAYS" prefWidth="190.0">
+                    <Label fx:id="lblPrecioCompra" text="Precio de compra" styleClass="campo-label"/>
+                    <CustomTextField fx:id="txtPrecioCompra" promptText="0.00">
+                        <left><Label text="S/" styleClass="prefijo-moneda"/></left>
+                    </CustomTextField>
+                    <Label styleClass="campo-error" visible="false" managed="false"/>
+                </VBox>
+                <VBox styleClass="campo" HBox.hgrow="ALWAYS" prefWidth="190.0">
+                    <Label fx:id="lblPrecioVenta" text="Precio de venta *" styleClass="campo-label"/>
+                    <CustomTextField fx:id="txtPrecioVenta" promptText="0.00">
+                        <left><Label text="S/" styleClass="prefijo-moneda"/></left>
+                    </CustomTextField>
+                    <Label styleClass="campo-error" visible="false" managed="false"/>
+                </VBox>
+            </HBox>
+            <Label fx:id="lblGanancia" styleClass="pf-ganancia" maxWidth="Infinity" wrapText="true"/>
+
+            <Label text="INVENTARIO" styleClass="seccion-form"/>
+
+            <HBox spacing="14.0">
+                <VBox fx:id="campoStockInicial" styleClass="campo" HBox.hgrow="ALWAYS" prefWidth="190.0">
+                    <Label text="Stock inicial" styleClass="campo-label"/>
+                    <CustomTextField fx:id="txtStockInicial" promptText="0">
+                        <left><FontIcon iconLiteral="fth-layers"/></left>
+                    </CustomTextField>
+                    <Label styleClass="campo-error" visible="false" managed="false"/>
+                </VBox>
+                <VBox fx:id="campoStockActual" styleClass="campo" HBox.hgrow="ALWAYS" prefWidth="190.0"
+                      visible="false" managed="false">
+                    <Label text="Stock actual" styleClass="campo-label"/>
+                    <Label fx:id="lblStockActual" styleClass="stock-actual" maxWidth="Infinity"/>
+                </VBox>
+                <VBox styleClass="campo" HBox.hgrow="ALWAYS" prefWidth="190.0">
+                    <Label text="Stock minimo" styleClass="campo-label"/>
+                    <CustomTextField fx:id="txtStockMinimo" promptText="5">
+                        <left><FontIcon iconLiteral="fth-alert-triangle"/></left>
+                    </CustomTextField>
+                    <Label styleClass="campo-error" visible="false" managed="false"/>
+                </VBox>
+            </HBox>
+            <Label fx:id="lblAyudaStock" styleClass="campo-ayuda" wrapText="true"
+                   text="El stock inicial queda registrado en el kardex. Luego cambia con compras y ventas."/>
+
+            <Label text="IMAGEN (OPCIONAL)" styleClass="seccion-form"/>
+            <HBox styleClass="pf-imagen-fila">
+                <StackPane fx:id="marcoImagen" styleClass="pf-imagen">
+                    <FontIcon fx:id="iconoSinImagen" iconLiteral="fth-image"/>
+                    <ImageView fx:id="vistaImagen" fitWidth="116.0" fitHeight="116.0" preserveRatio="true" smooth="true"/>
+                </StackPane>
+                <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                    <Button text="Elegir imagen…" onAction="#onElegirImagen" styleClass="button-outlined" maxWidth="Infinity">
+                        <graphic><FontIcon iconLiteral="fth-upload"/></graphic>
+                    </Button>
+                    <Button fx:id="btnQuitarImagen" text="Quitar imagen" onAction="#onQuitarImagen"
+                            styleClass="flat" maxWidth="Infinity">
+                        <graphic><FontIcon iconLiteral="fth-trash-2"/></graphic>
+                    </Button>
+                    <Label fx:id="lblImagen" styleClass="campo-ayuda" wrapText="true"
+                           text="PNG, JPG, GIF o BMP. Se muestra a color en el punto de venta."/>
+                </VBox>
+            </HBox>
+
+            <Label text="DETALLE" styleClass="seccion-form"/>
+            <VBox styleClass="campo">
+                <Label text="Descripcion" styleClass="campo-label"/>
+                <TextArea fx:id="txtDescripcion" promptText="Opcional: presentacion, marca, etc."
+                          prefRowCount="3" wrapText="true"/>
+                <Label styleClass="campo-error" visible="false" managed="false"/>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+    <HBox styleClass="drawer-footer">
+        <Button text="Cancelar" onAction="#onCerrar" styleClass="button-outlined"/>
+        <Button fx:id="btnGuardar" text="Guardar" onAction="#onGuardar" styleClass="accent">
+            <graphic><FontIcon iconLiteral="fth-check"/></graphic>
+        </Button>
+    </HBox>
+</VBox>

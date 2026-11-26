@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.CustomTextField?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<!-- Punto de venta en dos pantallas:
+     1) VENTA: categorias | catalogo con buscador/lector | carrito con teclado.
+     2) PAGO: comprobante, cliente y metodo de pago | importe recibido con teclado. -->
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:id="raiz"
+           fx:controller="com.ejemplo.crudpersona.controller.PuntoVentaController"
+           styleClass="pos">
+
+    <!-- ================================================================ VENTA -->
+    <HBox fx:id="pantallaVenta" styleClass="pos-venta">
+
+        <!-- ===== Categorias ===== -->
+        <VBox styleClass="pos-categorias" prefWidth="172.0" minWidth="150.0" maxWidth="190.0">
+            <Button text="Nuevo producto" onAction="#onNuevoProducto" styleClass="pos-nuevo-producto"
+                    maxWidth="Infinity" focusTraversable="false">
+                <graphic><FontIcon iconLiteral="fth-plus"/></graphic>
+            </Button>
+            <ScrollPane fitToWidth="true" styleClass="pos-scroll" VBox.vgrow="ALWAYS">
+                <VBox fx:id="listaCategorias" styleClass="pos-lista-categorias"/>
+            </ScrollPane>
+        </VBox>
+
+        <!-- ===== Catalogo ===== -->
+        <VBox styleClass="pos-centro" HBox.hgrow="ALWAYS">
+            <HBox styleClass="pos-barra">
+                <CustomTextField fx:id="txtBuscar" promptText="Buscar por nombre o escanear codigo de barras"
+                                 styleClass="pos-buscador" HBox.hgrow="ALWAYS">
+                    <left><FontIcon iconLiteral="fth-search"/></left>
+                    <right><Label text="F4" styleClass="pos-atajo"/></right>
+                </CustomTextField>
+                <Button onAction="#onRecargar" styleClass="button-icon,button-outlined,pos-boton-barra"
+                        focusTraversable="false">
+                    <graphic><FontIcon iconLiteral="fth-refresh-cw"/></graphic>
+                    <tooltip><Tooltip text="Recargar productos y stock"/></tooltip>
+                </Button>
+            </HBox>
+            <StackPane VBox.vgrow="ALWAYS">
+                <ScrollPane fx:id="scrollCatalogo" fitToWidth="true" styleClass="pos-scroll">
+                    <TilePane fx:id="catalogo" styleClass="pos-catalogo" hgap="14.0" vgap="14.0"
+                              prefTileWidth="168.0" prefTileHeight="236.0"/>
+                </ScrollPane>
+                <VBox fx:id="sinResultados" styleClass="pos-sin-resultados" visible="false" managed="false"
+                      mouseTransparent="true">
+                    <FontIcon iconLiteral="fth-search"/>
+                    <Label fx:id="lblSinResultados" text="No hay productos que coincidan" wrapText="true"/>
+                </VBox>
+            </StackPane>
+        </VBox>
+
+        <!-- ===== Carrito ===== -->
+        <VBox styleClass="pos-carrito" prefWidth="410.0" minWidth="370.0" maxWidth="440.0">
+            <HBox styleClass="pos-carrito-cabecera">
+                <FontIcon iconLiteral="fth-user"/>
+                <Label fx:id="lblClienteVenta" text="CLIENTE GENERICO" styleClass="pos-cliente-venta"
+                       HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button onAction="#onVaciar" styleClass="flat,button-icon,pos-boton-claro" focusTraversable="false">
+                    <graphic><FontIcon iconLiteral="fth-trash-2"/></graphic>
+                    <tooltip><Tooltip text="Vaciar carrito"/></tooltip>
+                </Button>
+            </HBox>
+
+            <ListView fx:id="listaCarrito" styleClass="pos-lista-carrito" VBox.vgrow="ALWAYS"
+                      focusTraversable="false"/>
+
+            <HBox styleClass="pos-total">
+                <Label text="Total" styleClass="pos-total-etiqueta" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <VBox styleClass="pos-total-derecha">
+                    <Label fx:id="lblNroProductos" text="Nro de productos: 0" styleClass="pos-total-nro"/>
+                    <Label fx:id="lblTotal" text="S/ 0.00" styleClass="pos-total-valor"/>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="pos-teclado-panel">
+                <HBox styleClass="pos-modos">
+                    <fx:define><ToggleGroup fx:id="grupoModo"/></fx:define>
+                    <ToggleButton fx:id="tglCantidad" text="Cantidad" toggleGroup="$grupoModo" selected="true"
+                                  styleClass="pos-modo" focusTraversable="false"/>
+                    <ToggleButton fx:id="tglDescuento" text="Descuento %" toggleGroup="$grupoModo"
+                                  styleClass="pos-modo" focusTraversable="false"/>
+                    <ToggleButton fx:id="tglPrecio" text="Cambiar precio" toggleGroup="$grupoModo"
+                                  styleClass="pos-modo" focusTraversable="false"/>
+                </HBox>
+                <Label fx:id="lblEntrada" styleClass="pos-entrada" maxWidth="Infinity"/>
+                <HBox styleClass="pos-teclado-fila">
+                    <GridPane fx:id="teclado" styleClass="pos-teclado" HBox.hgrow="ALWAYS"/>
+                    <VBox styleClass="pos-acciones">
+                        <Button fx:id="btnPagar" onAction="#onPagar" styleClass="pos-boton-pagar"
+                                maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS" focusTraversable="false">
+                            <graphic>
+                                <VBox styleClass="pos-boton-pagar-contenido">
+                                    <FontIcon iconLiteral="fth-dollar-sign"/>
+                                    <Label text="Pagar"/>
+                                    <Label text="F9" styleClass="pos-atajo-claro"/>
+                                </VBox>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="btnPagoRapido" text="Pago rapido (F10)" onAction="#onPagoRapido"
+                                styleClass="pos-boton-rapido" maxWidth="Infinity" focusTraversable="false">
+                            <tooltip><Tooltip text="Cobra en efectivo el monto exacto con nota de venta"/></tooltip>
+                        </Button>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </VBox>
+    </HBox>
+
+    <!-- ================================================================= PAGO -->
+    <HBox fx:id="pantallaPago" styleClass="pos-pago" visible="false" managed="false">
+
+        <ScrollPane fitToWidth="true" styleClass="pos-scroll" HBox.hgrow="ALWAYS">
+            <VBox styleClass="pos-pago-izquierda">
+                <HBox styleClass="pos-pago-cabecera">
+                    <Button onAction="#onVolverAVenta" styleClass="flat,button-circle" focusTraversable="false">
+                        <graphic><FontIcon iconLiteral="fth-arrow-left"/></graphic>
+                        <tooltip><Tooltip text="Volver al carrito (Esc)"/></tooltip>
+                    </Button>
+                    <Label text="Pagar" styleClass="pos-pago-titulo" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Label fx:id="lblPagoTotal" text="Total: S/ 0.00" styleClass="pos-pago-total"/>
+                </HBox>
+
+                <HBox styleClass="pos-tabs">
+                    <fx:define><ToggleGroup fx:id="grupoComprobante"/></fx:define>
+                    <ToggleButton fx:id="tglNotaVenta" text="Nota de venta" toggleGroup="$grupoComprobante"
+                                  selected="true" styleClass="pos-tab"/>
+                    <ToggleButton fx:id="tglBoleta" text="Boleta" toggleGroup="$grupoComprobante"
+                                  styleClass="pos-tab"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblNumeroComprobante" styleClass="pos-numero"/>
+                </HBox>
+
+                <Label text="Cliente" styleClass="pos-seccion"/>
+                <HBox spacing="10.0">
+                    <TextField fx:id="txtClientePago" editable="false" focusTraversable="false"
+                               styleClass="pos-cliente-campo" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCambiarCliente" text="Cambiar" onAction="#onCambiarCliente"
+                            styleClass="accent,pos-boton-cambiar"/>
+                </HBox>
+
+                <VBox fx:id="panelCliente" styleClass="pos-panel-cliente" visible="false" managed="false">
+                    <HBox spacing="10.0">
+                        <VBox styleClass="campo" prefWidth="220.0">
+                            <Label text="DNI" styleClass="campo-label"/>
+                            <HBox spacing="6.0">
+                                <CustomTextField fx:id="txtDniCliente" promptText="8 digitos y Enter" HBox.hgrow="ALWAYS">
+                                    <left><FontIcon iconLiteral="fth-credit-card"/></left>
+                                </CustomTextField>
+                                <Button onAction="#onBuscarDni" styleClass="button-icon,accent">
+                                    <graphic><FontIcon iconLiteral="fth-search"/></graphic>
+                                </Button>
+                            </HBox>
+                            <Label styleClass="campo-error" visible="false" managed="false"/>
+                        </VBox>
+                        <VBox styleClass="campo" HBox.hgrow="ALWAYS">
+                            <Label text="O busca por nombre" styleClass="campo-label"/>
+                            <CustomTextField fx:id="txtNombreCliente" promptText="Ej. Maria Quispe">
+                                <left><FontIcon iconLiteral="fth-user"/></left>
+                            </CustomTextField>
+                        </VBox>
+                    </HBox>
+                    <VBox fx:id="panelNuevoCliente" spacing="8.0" visible="false" managed="false">
+                        <Label fx:id="lblNuevoCliente" styleClass="campo-ayuda" wrapText="true"/>
+                        <HBox spacing="10.0">
+                            <VBox styleClass="campo" HBox.hgrow="ALWAYS">
+                                <TextField fx:id="txtNuevoNombre" promptText="Nombres"/>
+                                <Label styleClass="campo-error" visible="false" managed="false"/>
+                            </VBox>
+                            <VBox styleClass="campo" HBox.hgrow="ALWAYS">
+                                <TextField fx:id="txtNuevoApellido" promptText="Apellidos"/>
+                                <Label styleClass="campo-error" visible="false" managed="false"/>
+                            </VBox>
+                            <Button text="Registrar" onAction="#onRegistrarCliente" styleClass="accent">
+                                <graphic><FontIcon iconLiteral="fth-user-plus"/></graphic>
+                            </Button>
+                        </HBox>
+                    </VBox>
+                    <Hyperlink text="Usar CLIENTE GENERICO" onAction="#onClienteGenerico"/>
+                </VBox>
+
+                <HBox styleClass="pos-enlaces">
+                    <Hyperlink fx:id="lnkResumen" text="Ver resumen de compra" onAction="#onVerResumen"/>
+                    <Hyperlink fx:id="lnkComentario" text="Anadir comentario" onAction="#onAnadirComentario"/>
+                </HBox>
+                <VBox fx:id="panelResumen" styleClass="pos-resumen" visible="false" managed="false"/>
+                <TextField fx:id="txtComentario" promptText="Comentario u observacion de la venta"
+                           visible="false" managed="false"/>
+
+                <Label text="Selecciona un metodo de pago" styleClass="pos-seccion"/>
+                <HBox styleClass="pos-metodos">
+                    <fx:define><ToggleGroup fx:id="grupoMetodo"/></fx:define>
+                    <ToggleButton fx:id="tglEfectivo" toggleGroup="$grupoMetodo" selected="true" styleClass="pos-metodo">
+                        <graphic>
+                            <VBox styleClass="pos-metodo-contenido">
+                                <FontIcon iconLiteral="fth-dollar-sign"/>
+                                <Label text="EFECTIVO"/>
+                            </VBox>
+                        </graphic>
+                    </ToggleButton>
+                    <ToggleButton fx:id="tglTarjeta" toggleGroup="$grupoMetodo" styleClass="pos-metodo">
+                        <graphic>
+                            <VBox styleClass="pos-metodo-contenido">
+                                <FontIcon iconLiteral="fth-credit-card"/>
+                                <Label text="TARJETA"/>
+                            </VBox>
+                        </graphic>
+                    </ToggleButton>
+                    <ToggleButton fx:id="tglYape" toggleGroup="$grupoMetodo" styleClass="pos-metodo">
+                        <graphic>
+                            <VBox styleClass="pos-metodo-contenido">
+                                <FontIcon iconLiteral="fth-smartphone"/>
+                                <Label text="YAPE"/>
+                            </VBox>
+                        </graphic>
+                    </ToggleButton>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+
+        <VBox styleClass="pos-pago-derecha" prefWidth="410.0" minWidth="370.0" maxWidth="440.0">
+            <VBox styleClass="pos-importe">
+                <Label fx:id="lblTituloImporte" text="IMPORTE RECIBIDO" styleClass="pos-importe-titulo"/>
+                <Label fx:id="lblRecibido" text="S/ 0.00" styleClass="pos-importe-valor"/>
+                <Label fx:id="lblVuelto" styleClass="pos-importe-vuelto"/>
+            </VBox>
+            <FlowPane fx:id="montosRapidos" styleClass="pos-montos"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <HBox styleClass="pos-teclado-fila,pos-teclado-pago">
+                <GridPane fx:id="tecladoPago" styleClass="pos-teclado" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnConfirmarPago" onAction="#onConfirmarPago" styleClass="pos-boton-pagar"
+                        maxHeight="Infinity" focusTraversable="false">
+                    <graphic>
+                        <VBox styleClass="pos-boton-pagar-contenido">
+                            <FontIcon iconLiteral="fth-check-circle"/>
+                            <Label text="Pagar"/>
+                            <Label text="Enter" styleClass="pos-atajo-claro"/>
+                        </VBox>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </HBox>
+</StackPane>
