@@ -7,7 +7,15 @@ productos con código o a granel (por kilo), inventario con kardex, compras, cli
 
 ## Descargar para Windows (recomendado)
 
-1. Entra a **[Releases](https://github.com/paulcayoccori-ship-it/MiniMarket-Pro/releases/latest)** y descarga `MiniMarketPro-Setup-x.y.z.exe`.
+<p align="center">
+  <a href="https://paulcayoccori-ship-it.github.io/MiniMarket-Pro/">
+    <img src="https://img.shields.io/badge/Descargar%20para%20Windows-111111?style=for-the-badge&logo=windows&logoColor=white" alt="Descargar para Windows" height="48">
+  </a>
+</p>
+
+Página de descarga: **https://paulcayoccori-ship-it.github.io/MiniMarket-Pro/**
+
+1. Haz clic en **Descargar para Windows** (o entra a [Releases](https://github.com/paulcayoccori-ship-it/MiniMarket-Pro/releases/latest)) y descarga `MiniMarketPro-Setup-x.y.z.exe`.
 2. Ábrelo y sigue el asistente. **No necesitas instalar Java**: el instalador ya lo incluye.
 3. Si Windows muestra *"Windows protegió su PC"*, haz clic en **Más información → Ejecutar de todas formas**.
 4. Abre **MiniMarket Pro** desde el escritorio o el menú Inicio.
